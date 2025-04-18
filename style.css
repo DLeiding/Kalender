@@ -1,0 +1,663 @@
+    /* ------------------ Globalt tema ------------------ */
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(to bottom right, #f9f9f9, #e6e6e6);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    /* ------------------ Meny ------------------ */
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      background: dimgrey;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1200;
+    }
+    .tab-button {
+      background: none;
+      border: none;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      color: white;
+    }
+    .tab-button.active {
+      background: cyan;
+      color: #111;
+    }
+    .tab-button:hover {
+      transform: translateY(-2px);
+    }
+    /* ------------------ Fasta Statusbar ------------------ */
+    .top-status-bar {
+      position: fixed;
+      top: 60px; /* höjd på menyn */
+      left: 0;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 1150;
+    }
+    /* Statusbar: Vänster – övriga prognosdagar; Mitten – klocka & datum; Höger – dagens väder */
+    .tsb-left, .tsb-center, .tsb-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Klocka & Datum (mitt) */
+    .clock-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .big-time {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .small-date {
+      font-size: 0.95rem;
+      color: #666;
+    }
+    /* Dagens väder (höger) */
+    .weather-now {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .weather-now i {
+      font-size: 1.8rem;
+      color: #333;
+    }
+    #current-temp {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    #weather-desc {
+      font-size: 0.95rem;
+      color: #666;
+    }
+    /* Övriga prognosdagar (vänster) */
+    .forecast-others {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .forecast-others .day {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 6px;
+      border-radius: 8px;
+      min-width: 60px;
+      font-size: 0.8rem;
+      color: #444;
+    }
+    .forecast-others .day i {
+      font-size: 1.2rem;
+      margin: 2px 0;
+    }
+    /* ------------------ Huvudinnehåll ------------------ */
+    .container {
+      margin-top: 130px; /* utrymme för meny + statusbar */
+      background: #fff;
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 1100px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s forwards;
+      width: 100%;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* ------------------ Widgetar ------------------ */
+    .widget {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .top-widgets {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .calendar-iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    /* ------------------ Nyhetsbanner ------------------ */
+    .news-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 12px;
+      font-weight: bold;
+      z-index: 1100;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .news-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollLeft 70s linear infinite;
+    }
+    @keyframes scrollLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    /* ------------------ ToDo ------------------ */
+ /* ----- ToDo som kort ----- */
+/* ------------------ ToDo som kort ------------------ */
+#todo .widget { border-left: none !important; padding: 0; }
+#todo .widget h2 { margin: 16px; }
+.todo-card {
+  background: #fdfdfd;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+}
+#todo-list { list-style: none; padding: 0; margin: 0; }
+#todo-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px dashed #ddd;
+  transition: background 0.2s;
+}
+#todo-list li:last-child { border-bottom: none; }
+#todo-list li:hover { background: rgba(0,0,0,0.02); }
+.todo-input {
+  border: none;
+  border-top: 1px solid #ddd;
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+/* Checkbox som i Sysslor */
+.todo-checkbox {
+  width: 20px; height: 20px; margin-right: 12px;
+  -webkit-appearance: none; appearance: none;
+  border: 2px solid #ddd; border-radius: 4px;
+  position: relative; transition: background 0.2s, border-color 0.2s;
+}
+.todo-checkbox:checked {
+  background: #4caf50; border-color: #4caf50;
+}
+.todo-checkbox:checked::after {
+  content: "✓"; color: #fff;
+  position: absolute; top: 0; left: 3px;
+  font-size: 14px; line-height: 20px;
+}
+/* Pop‑animation på text */
+#todo-list li span {
+  display: inline-block; transition: transform 0.2s;
+}
+.pop-text {
+  animation: popEffect 0.5s ease-out;
+}
+    /* ------------------ Agenda (använder kod från din bifogade fil) ------------------ */
+    .agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  overflow: visible;
+}
+    .agenda-column {
+  flex: 1;
+  min-width: 22%;
+  margin: 0 5px;
+  padding: 15px;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s ease;
+}
+    .agenda-column:hover {
+      transform: translateY(-5px);
+    }
+    .agenda-column h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 8px;
+    }
+    .event {
+      margin-bottom: 14px;
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: grey;
+      color: cyan;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 2000;
+      max-width: 90%;
+    }
+    .popup.active { display: block; }
+    .popup .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .popup .popup-body {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    .popup .event-item {
+      border-bottom: 1px dashed #ccc;
+      padding: 6px 0;
+      margin-bottom: 6px;
+    }
+    .popup-close {
+      background: none;
+        color: white;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+/* Se till att hela raden kan animera */
+#todo-list li span {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+/* Återanvänd popEffect på texten */
+.pop-text {
+  animation: popEffect 0.5s ease-out;
+}
+
+    /* ------------------ Sysslor (kort) ------------------ */
+    .cards-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card {
+      background: #fdfdfd;
+      border-radius: 15px;
+      padding: 15px;
+      width: 300px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+    .card h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid;
+    }
+    .card.maximilian h2 { border-color: #add8e6; color: #add8e6; }
+    .card.milou h2 { border-color: #ffd1dc; color: #ffd1dc; }
+    .card.molly h2 { border-color: #e6ccff; color: #e6ccff; }
+    .group {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .card.maximilian .group-header { background: rgba(173,216,230,0.3); }
+    .card.milou .group-header { background: rgba(255,209,220,0.3); }
+    .card.molly .group-header { background: rgba(230,204,255,0.3); }
+    .group-header {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      background: #f5f5f5;
+    }
+    .group-header:hover { background: #e0e0e0; }
+    .group-header .icon { margin-right: 8px; }
+    .group-header .counter {
+      margin-left: auto;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .group-content {
+      display: none;
+      padding: 10px 15px;
+      border-top: 1px dashed #ddd;
+    }
+    .group-content ul { list-style: none; padding: 0; }
+    .group-content li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dashed #ddd;
+      transition: transform 0.3s;
+    }
+    .group-content li:last-child { border-bottom: none; }
+    .group-content input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      margin-right: 10px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      position: relative;
+    }
+    .group-content input[type="checkbox"]:checked {
+      background: #4caf50;
+      border-color: #4caf50;
+    }
+    .group-content input[type="checkbox"]:checked::after {
+      content: "✓";
+      color: #fff;
+      position: absolute;
+      top: 0;
+      left: 4px;
+      font-size: 14px;
+    }
+    .add-task {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .add-task input {
+      flex: 1;
+      padding: 6px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+    .add-task button {
+      padding: 6px 10px;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+/* gör ToDo‑checkboxen lik den i Sysslor */
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  position: relative;
+  vertical-align: middle;
+  transition: background 0.2s, border-color 0.2s;
+}
+.todo-checkbox:checked {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+.todo-checkbox:checked::after {
+  content: "✓";
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 3px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* se till att uppgiftstexten kan poppas */
+#todo-list li span {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+/* återanvänd din popEffect på texten */
+.pop-text {
+  animation: popEffect 0.5s ease-out;
+}
+
+    /* ------------------ Effekter ------------------ */
+    .pop {
+      animation: popEffect 0.5s ease-out;
+    }
+    @keyframes popEffect {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    /* ------------------ Dark Mode ------------------ */
+    body.dark-mode {
+      background: linear-gradient(to bottom right, #2c2c2c, #1c1c1c);
+      color: #f0f0f0;
+    }
+    body.dark-mode .container,
+    body.dark-mode .widget,
+    body.dark-mode .card,
+    body.dark-mode .group,
+    body.dark-mode .group-header,
+    body.dark-mode .group-content {
+      background: rgba(40, 40, 40, 0.8) !important;
+      color: #f0f0f0 !important;
+    }
+    body.dark-mode .group-header { background: rgba(60, 60, 60, 0.8) !important; }
+    body.dark-mode .add-task button { background: #66bb6a; }
+    /* ------------------ Media Queries (iPad) ------------------ */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .top-status-bar { padding: 8px 12px; }
+      .big-time { font-size: 1.6rem; }
+      #current-temp { font-size: 1.1rem; }
+      .container { padding: 20px; }
+      .widget { padding: 15px; }
+      .todo-input { font-size: 1rem; }
+      .tab-button { padding: 8px 16px; }
+    }
+/* --- Återställ huvudevent‑utseendet --- */
+.agenda-column .event {
+  background: transparent; /* eller vad du vill som bas */
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+/* Ändra font för händelserna i Agendan */
+.agenda-column .event {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;       /* justera storlek efter behov */
+  font-weight: 400;         /* eller t.ex. 600 om du vill fetare text */
+  color: #333;              /* ändra textfärg om du vill */
+}
+
+/* --- Färgkodning av händelser per person --- */
+#emma      .event { background-color: #ffeedb; }
+#maximilian .event { background-color: #e3fdd9; }
+#familj    .event { background-color: #ffe5e0; }
+#dennis    .event { background-color: #e0f0ff; }
+#milou     .event { background-color: #ffd8e6; }
+#molly     .event { background-color: #f1e5ff; }
+
+/* Justera gärna text‑/ramfärg om kontrasten kräver det */
+#emma      .event, 
+#maximilian.event,
+#familj    .event,
+#dennis    .event,
+#milou     .event,
+#molly     .event {
+  border: 1px solid rgba(0,0,0,0.1);
+}
+/* --- Bas‑widget på alla kolumner --- */
+.agenda-column {
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #fdfdfd;       /* vit bakgrund för widget */
+  border-radius: 16px;
+  padding: 15px;
+}
+
+/* --- Specifika färger & typsnitt per familjemedlem --- */
+#emma {
+  border-color: #FFA07A;
+}
+#emma h3 {
+  color: #FFA07A;
+  font-family: 'Poppins', sans-serif;
+}
+/* Streck under varje familjemedlem-rubrik */
+.agenda-column h3 {
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+#maximilian {
+  border-color: #e3fdd9;
+}
+#maximilian h3 {
+  color: #e3fdd9;
+  font-family: 'Poppins', sans-serif;
+}
+
+#familj {
+  border-color: #ffe5e0;
+}
+#familj h3 {
+  color: #ffe5e0;
+  font-family: 'Poppins', sans-serif;
+}
+
+#dennis {
+  border-color: #a0cfff;
+}
+#dennis h3 {
+  color: #e0f0ff;
+  font-family: 'Poppins', sans-serif;
+}
+
+#milou {
+  border-color: #ffd1dc;
+}
+#milou h3 {
+  color: #ffd1dc;;
+  font-family: 'Poppins', sans-serif;
+}
+
+#molly {
+  border-color: #e6ccff;
+}
+#molly h3 {
+  color: #e6ccff;
+  font-family: 'Poppins', sans-serif;
+}
+/* Popup: font för all text */
+.popup {
+  font-family: 'Poppins', sans-serif; /* byt till den font du vill använda */
+}
+
+/* Popup: separat font för rubriken om du vill */
+.popup h3 {
+  font-family: 'Poppins', sans-serif; /* eller annan font */
+}
+/* --- Start: Dagens händelser-widget --- */
+#today-events-widget {
+  background: #fff;
+  border-radius: 16px;
+  padding: 10px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.today-events-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+font-family: 'Poppins', sans-serif; 
+}
+.today-event-card {
+  background: grey;
+  border-radius: 12px;
+  padding: 12px;
+  flex: 1;
+  min-width: calc(25% - 1px);
+    
+}
+.today-event-card .header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.today-event-card .avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: cyan;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #111;
+  margin-right: 8px;
+}
+.today-event-card .name {
+     font-weight: bold;
+  font-weight: 800;
+    color: white
+}
+.today-event-card .event-title {
+     font-weight: bold;
+  font-size: 0.99rem;
+  margin-bottom: 4px;
+    color: white
+}
+.today-event-card .event-time {
+    
+  font-size: 0.90rem;
+  color: white;
+}
